@@ -6,6 +6,7 @@ template<class T> void BubbleSort(vector<T> &vArray)
         return;
     for(int iEnd = vArray.size()-1;iEnd>0;--iEnd)
     {    
+        bool bExchange = false;
         for(int iBegin = 0; iBegin < iEnd;++iBegin)
         {
             if(vArray[iBegin] > vArray[iBegin+1])
@@ -13,9 +14,14 @@ template<class T> void BubbleSort(vector<T> &vArray)
                 T tValue_Smaller =vArray[iBegin+1];
                 vArray[iBegin+1]=vArray[iBegin];
                 vArray[iBegin]=tValue_Smaller;
+                bExchange = true;
             }
         }
+        if(!bExchange)
+            break;
     }
+
+    return;
 }
 
 
