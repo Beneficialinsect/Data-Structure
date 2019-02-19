@@ -21,38 +21,54 @@ template<class T> void Selection_Sort(vector<T> &vSort)
     return;
 }
 
-template<class T> void Max_heapfy(vector<T> &vSort, int iStart, int iEnd)
+template<class T> void AdustHeap(vector<T> &vSort, int iCheckLac, int iEndLac)
 {
-    int iParentLac = iStart;
-    int iChildLac = iParentLac * 2 + 1;
-    while (iChildLac <= iEnd)
+    T tValue = vSort[iCheckLac];
+    for (int iCompLac = iCheckLac * 2 + 1; iCompLac < iEndLac; iCompLac = iCompLac * 2 + 1)
     {
-        if (iChildLac + 1 <= iEnd && vSort[iChildLac] < vSort[iChildLac + 1])
-            ++iChildLac;
-        if (vSort[iParentLac] > vSort[iChildLac])
-            return;
-        else
+        if (iCompLac + 1 < iEndLac && vSort[iCompLac] < vSort[iCompLac + 1])
         {
-            T tValue = vSort[iParentLac];
-            vSort[iParentLac] = vSort[iChildLac];
-            vSort[iChildLac] = tValue;
-            iChildLac = iParentLac * 2 + 1;
+            iCompLac++;
         }
+        if (vSort[iCompLac] > tValue)
+        {
+            vSort[iCheckLac] = vSort[iCompLac];
+            iCheckLac = iCompLac;
+        }
+        else
+            break;
     }
+    vSort[iCheckLac] = tValue;
+
     return;
 }
 
+template<class T> void BuildMaxHeap(vector<T> &vSort)
+{
+    if (vSort.empty())
+        return;
+    int iTotalLen = vSort.size();
+    for (int iLac = floor(iTotalLen / 2); iLac >= 0; --iLac)
+        AdustHeap(vSort, iLac, iTotalLen);
+
+    return;
+}
+
+
+
+
 template<class T> void HeapSort(vector<T> &vSort)
 {
-    int iStartLac = 0;
-    for (iStartLac = vSort.size() / 2 - 1; iStartLac >= 0; --iStartLac)
-        Max_heapfy(vSort, iStartLac, vSort.size() - 1);
+    if (vSort.empty())
+        return;
+    BuildMaxHeap(vSort);
 
-    for (iStartLac = vSort.size() - 1; iStartLac > 0; iStartLac--)
+    for (int iLac = vSort.size() - 1; iLac > 0; --iLac)
     {
-        T tValue = vSort[0];
-        vSort[0] = vSort[iStartLac];
-        Max_heapfy(vSort, 0, iStartLac - 1);
+        T tValue = vSort[0] ;
+        vSort[0] = vSort[iLac];
+        vSort[iLac] = tValue;
+        AdustHeap(vSort, 0, iLac);
     }
 
     return;
